@@ -3,10 +3,13 @@
 }
 
 <h2>@ViewData["title"]</h2>
-<h3>@Model.AppName</h3>
 
-<p>
-    @Model.Version<br />
-    @Model.Copyright<br />
-    <a href="@Model.Url">@Model.Url</a>
-</p>
+<div class="jumbotron">
+    <h3>@Model.AppName</h3>
+
+    <p>
+        @Model.Version<br />
+        &copy; @Model.Copyright<br />
+        <a href="@Model.Url">@Model.Url</a>
+    </p>
+</div>
