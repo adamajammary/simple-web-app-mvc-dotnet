@@ -1,0 +1,19 @@
+﻿body {
+    background-color: #505050;
+    color:            #FFF;
+    padding-top:      50px;
+    padding-bottom:   20px;
+}
+
+input {
+    color: #000;
+}
+
+select {
+    color: #000;
+}
+
+.body-content {
+    padding-left:  15px;
+    padding-right: 15px;
+}

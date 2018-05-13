@@ -1,0 +1,44 @@
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+using SimpleWebAppMVC.Models;
+
+namespace SimpleWebAppMVC.Controllers
+{
+    /**
+     * Home Controller
+     */
+    public class HomeController : Controller
+    {
+        /**
+         * GET: /Home/About
+         */
+        public IActionResult About()
+        {
+            AboutModel model = new AboutModel();
+
+            model.AppName   = "Simple Web App MVC";
+            model.Copyright = "(c) 2018 Adam A. Jammary";
+            model.Url       = "http://www.jammary.com/";
+            model.Version   = "Version 1.0.0";
+
+            return View(model);
+        }
+
+        /**
+         * GET: /Home/Error
+         */
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        /**
+         * GET: [ /, /Home/, /Home/Index ]
+         */
+        public IActionResult Index()
+        {
+            ViewData["message"] = "Welcome to my simple web app";
+            return View();
+        }
+    }
+}
