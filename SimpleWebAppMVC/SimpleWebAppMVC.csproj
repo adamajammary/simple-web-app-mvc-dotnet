@@ -8,11 +8,11 @@
     <Description>Simple Web App MVC</Description>
     <Copyright>(c) 2018 Adam A. Jammary</Copyright>
     <PackageLicenseUrl></PackageLicenseUrl>
-    <PackageProjectUrl>http://www.jammary.com/</PackageProjectUrl>
+    <PackageProjectUrl>http://simple-web-app-mvc-dotnet.azurewebsites.net/</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
