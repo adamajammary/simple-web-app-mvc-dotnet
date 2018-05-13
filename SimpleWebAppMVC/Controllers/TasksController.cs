@@ -148,9 +148,28 @@ namespace SimpleWebAppMVC.Controllers
         /**
          * GET: [ /Tasks/, /Tasks/Index ]
          */
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sort)
         {
-            return View(await this.dbContext.Tasks.ToListAsync());
+            ViewBag.TitleSortParm       = (sort == "Title"       ? "Title_desc"       : "Title");
+            ViewBag.DescriptionSortParm = (sort == "Description" ? "Description_desc" : "Description");
+            ViewBag.DateSortParm        = (sort == "Date"        ? "Date_desc"        : "Date");
+            ViewBag.StatusSortParm      = (sort == "Status"      ? "Status_desc"      : "Status");
+
+            IQueryable<Models.Task> tasks = from task in this.dbContext.Tasks select task;
+
+            switch (sort) {
+                case "Title":            tasks = tasks.OrderBy(s => s.Title);                 break;
+                case "Title_desc":       tasks = tasks.OrderByDescending(s => s.Title);       break;
+                case "Description":      tasks = tasks.OrderBy(s => s.Description);           break;
+                case "Description_desc": tasks = tasks.OrderByDescending(s => s.Description); break;
+                case "Date":             tasks = tasks.OrderBy(s => s.Date);                  break;
+                case "Date_desc":        tasks = tasks.OrderByDescending(s => s.Date);        break;
+                case "Status":           tasks = tasks.OrderBy(s => s.Status);                break;
+                case "Status_desc":      tasks = tasks.OrderByDescending(s => s.Status);      break;
+                default:                 tasks = tasks.OrderBy(s => s.Title);                 break;
+            }
+
+            return View(await tasks.ToListAsync());
         }
 
         /**
