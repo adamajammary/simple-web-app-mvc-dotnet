@@ -14,7 +14,7 @@ namespace SimpleWebAppMVC.Controllers
          */
         public IActionResult About()
         {
-            AboutModel model = new AboutModel();
+            About model = new About();
 
             model.AppName   = "Simple Web App MVC";
             model.Copyright = "2018 Adam A. Jammary";
@@ -38,7 +38,7 @@ namespace SimpleWebAppMVC.Controllers
         public IActionResult Index()
         {
             ViewData["message_short"] = "Welcome to my simple web app";
-            ViewData["message_long"]  = "This simple web app was made using ASP.NET Core 2.0 MVC and hosted on Azure Cloud Services.";
+            ViewData["message_long"]  = "This simple web app is made using ASP.NET Core 2.0 MVC and hosted on Azure Cloud Services.";
 
             return View();
         }

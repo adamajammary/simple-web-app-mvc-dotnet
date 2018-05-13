@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SimpleWebAppMVC.Data;
 
 namespace SimpleWebAppMVC
 {
@@ -10,7 +12,7 @@ namespace SimpleWebAppMVC
      */
     public class Startup
     {
-        public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; set; }
 
         /**
          * Startup constructor.
@@ -27,6 +29,10 @@ namespace SimpleWebAppMVC
          */
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<AppDbContext>(
+                options => options.UseSqlServer(this.Configuration.GetConnectionString("DbConnection"))
+            );
+
             services.AddMvc();
         }
 
@@ -37,6 +43,14 @@ namespace SimpleWebAppMVC
          */
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                //.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables();
+
+            this.Configuration = builder.Build();
+
             if (env.IsDevelopment()) {
                 app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
@@ -48,7 +62,10 @@ namespace SimpleWebAppMVC
             app.UseStaticFiles();
 
             // Register routes
-            app.UseMvc(routes => routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}"));
+            app.UseMvc(routes => {
+                routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}");
+                //routes.MapRoute(name: "tasks",   template: "{controller=Tasks}/{action=Index}/{id?}");
+            });
         }
     }
 }
