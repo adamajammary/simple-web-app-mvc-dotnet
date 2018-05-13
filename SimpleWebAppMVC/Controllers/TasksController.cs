@@ -25,6 +25,7 @@ namespace SimpleWebAppMVC.Controllers
         /**
          * GET: /Tasks/Create
          */
+        [HttpGet]
         public IActionResult Create()
         {
             return View(new Models.Task());
@@ -53,6 +54,7 @@ namespace SimpleWebAppMVC.Controllers
          * GET: /Tasks/Details/<id>
          * @param id Task ID
          */
+        [HttpGet]
         public async Task<IActionResult> Details(string id)
         {
             if (id == null)
@@ -70,6 +72,7 @@ namespace SimpleWebAppMVC.Controllers
          * GET: /Tasks/Edit/<id>
          * @param id Task ID
          */
+        [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -101,7 +104,7 @@ namespace SimpleWebAppMVC.Controllers
                     this.dbContext.Update(taskModel);
                     await this.dbContext.SaveChangesAsync();
                 } catch (DbUpdateConcurrencyException) {
-                    if (!TaskModelExists(taskModel.ID))
+                    if (!this.taskModelExists(taskModel.ID))
                         return NotFound();
                     else
                         throw;
@@ -117,6 +120,7 @@ namespace SimpleWebAppMVC.Controllers
          * GET: /Tasks/Delete/<id>
          * @param id Task ID
          */
+        [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -144,11 +148,33 @@ namespace SimpleWebAppMVC.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
+        
         /**
          * GET: [ /Tasks/, /Tasks/Index ]
+         * @param sort Sort column and order
          */
+        [HttpGet]
         public async Task<IActionResult> Index(string sort)
+        {
+            ViewData["sort"] = sort;
+            return View(await this.getSorted(sort).ToListAsync());
+        }
+
+        /**
+         * GET: /Tasks/GetJSON/<sort>
+         * @param sort Sort column and order
+         */
+        [HttpGet]
+        public async Task<IActionResult> GetJSON(string sort)
+        {
+            return Json(this.getSorted(sort).ToListAsync().Result);
+        }
+
+        /**
+         * Returns a list of tasks sorted by the specified sort column and order.
+         * @param sort Sort column and order
+         */
+        private IQueryable<Models.Task> getSorted(string sort)
         {
             ViewBag.TitleSortParm       = (sort == "Title"       ? "Title_desc"       : "Title");
             ViewBag.DescriptionSortParm = (sort == "Description" ? "Description_desc" : "Description");
@@ -169,14 +195,14 @@ namespace SimpleWebAppMVC.Controllers
                 default:                 tasks = tasks.OrderBy(s => s.Title);                 break;
             }
 
-            return View(await tasks.ToListAsync());
+            return tasks;
         }
 
         /**
          * Returns the specified task if it exists.
          * @param id Task ID
          */
-        private bool TaskModelExists(string id)
+        private bool taskModelExists(string id)
         {
             return this.dbContext.Tasks.Any(e => e.ID == id);
         }
