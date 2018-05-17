@@ -18,7 +18,7 @@ namespace SimpleWebAppMVC.Controllers
 
             model.AppName   = "Simple Web App MVC";
             model.Copyright = "2018 Adam A. Jammary";
-            model.Url       = "http://simple-web-app-mvc-dotnet.azurewebsites.net/";
+            model.Url       = "https://simple-web-app-mvc-dotnet.azurewebsites.net/";
             model.Version   = "Version 1.0.0";
 
             return View(model);
