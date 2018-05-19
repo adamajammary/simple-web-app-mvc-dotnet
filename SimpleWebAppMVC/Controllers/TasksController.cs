@@ -156,7 +156,13 @@ namespace SimpleWebAppMVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(string sort)
         {
-            ViewData["sort"] = sort;
+            ViewBag.TitleSortParm       = (sort == "Title"       ? "Title_desc"       : "Title");
+            ViewBag.DescriptionSortParm = (sort == "Description" ? "Description_desc" : "Description");
+            ViewBag.DateSortParm        = (sort == "Date"        ? "Date_desc"        : "Date");
+            ViewBag.StatusSortParm      = (sort == "Status"      ? "Status_desc"      : "Status");
+
+            ViewData["sortJSON"] = sort;
+
             return View(await this.getSorted(sort).ToListAsync());
         }
 
@@ -176,11 +182,6 @@ namespace SimpleWebAppMVC.Controllers
          */
         private IQueryable<Models.Task> getSorted(string sort)
         {
-            ViewBag.TitleSortParm       = (sort == "Title"       ? "Title_desc"       : "Title");
-            ViewBag.DescriptionSortParm = (sort == "Description" ? "Description_desc" : "Description");
-            ViewBag.DateSortParm        = (sort == "Date"        ? "Date_desc"        : "Date");
-            ViewBag.StatusSortParm      = (sort == "Status"      ? "Status_desc"      : "Status");
-
             IQueryable<Models.Task> tasks = from task in this.dbContext.Tasks select task;
 
             switch (sort) {
