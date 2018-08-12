@@ -13,7 +13,7 @@ namespace SimpleWebAppMVC.Controllers
         // GET /Home/About
         public IActionResult About()
         {
-            FileVersionInfo info  = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location);
+            FileVersionInfo info  = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
             About           model = new About();
 
             model.AppName   = info.ProductName;
