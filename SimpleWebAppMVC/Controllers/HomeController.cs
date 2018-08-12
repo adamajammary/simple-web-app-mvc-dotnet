@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using SimpleWebAppMVC.Models;
+using System.Reflection;
 
 namespace SimpleWebAppMVC.Controllers
 {
@@ -9,32 +10,36 @@ namespace SimpleWebAppMVC.Controllers
      */
     public class HomeController : Controller
     {
-        /**
-         * GET: /Home/About
-         */
+        // GET /Home/About
         public IActionResult About()
         {
-            About model = new About();
+            FileVersionInfo info  = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location);
+            About           model = new About();
 
-            model.AppName   = "Simple Web App MVC";
-            model.Copyright = "2018 Adam A. Jammary";
+            model.AppName   = info.ProductName;
+            model.Copyright = info.LegalCopyright;
             model.Url       = "https://simple-web-app-mvc-dotnet.azurewebsites.net/";
-            model.Version   = "Version 1.0.0";
+            model.Version   = ("Version " + info.ProductVersion);
 
             return View(model);
         }
 
-        /**
-         * GET: /Home/Error
-         */
+        // GET /Home/API
+        [HttpGet]
+        public IActionResult API()
+        {
+            ViewData["message_short"] = "Tasks API";
+
+            return View();
+        }
+
+        // GET /Home/Error
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        /**
-         * GET: [ /, /Home/, /Home/Index ]
-         */
+        // GET [ /, /Home/, /Home/Index ]
         public IActionResult Index()
         {
             ViewData["message_short"] = "Welcome to my simple web app";

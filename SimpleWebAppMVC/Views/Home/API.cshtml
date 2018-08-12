@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewData["title"] = "Tasks API";
+}
+
+<h2>Simple REST Web API</h2>
+
+<div class="jumbotron">
+    <h3>@ViewData["message_short"]</h3>
+    <p>You can use <a href="https://www.getpostman.com/apps">Postman</a> or <a href="https://curl.haxx.se/docs/manpage.html">curl</a> to test the API from the client side.</p>
+
+    <table class="api">
+        <tr><th>Method</th><th>URL</th><th>Description</th></tr>
+        <tr><td>GET</td><td><a href="/api/Tasks">/api/Tasks</a></td><td>Returns all tasks</td></tr>
+        <tr><td>GET</td><td><a href="/api/Tasks/id">/api/Tasks/id</a></td><td>Returns the task with the specified ID if it exists</td></tr>
+        <tr><td>POST</td><td><a href="/api/Tasks">/api/Tasks</a></td><td>Adds a new task</td></tr>
+        <tr><td>PUT</td><td><a href="/api/Tasks/id">/api/Tasks/id</a></td><td>Updates the task with the specified ID if it exists</td></tr>
+        <tr><td>DELETE</td><td><a href="/api/Tasks/id">/api/Tasks/id</a></td><td>Deletes the task with the specified ID if it exists</td></tr>
+    </table>
+</div>

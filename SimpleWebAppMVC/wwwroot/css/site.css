@@ -13,6 +13,10 @@ select {
     color: #000;
 }
 
+.api td, th {
+    padding-right: 20px;
+}
+
 .body-content {
     padding-left:  15px;
     padding-right: 15px;

@@ -31,6 +31,15 @@ namespace SimpleWebAppMVC.Models
                 "N/A", "Not Started", "Started", "In Progress", "Almost Done", "Completed"
             }
         );
+
+        public void Update(Task task)
+        {
+            this.Title       = task.Title;
+            this.Description = task.Description;
+            this.Date        = task.Date;
+            this.Status      = task.Status;
+        }
+
         /*public List<SelectListItem> StatusCodes { get; } = new List<SelectListItem>
         {
             new SelectListItem { Value = "N/A",         Text = "N/A" },

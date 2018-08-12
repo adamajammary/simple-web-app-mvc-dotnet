@@ -43,6 +43,7 @@ namespace SimpleWebAppMVC
          */
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            // ASPNETCORE_ENVIRONMENT = [ "Development" | "Production" ]
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 //.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)

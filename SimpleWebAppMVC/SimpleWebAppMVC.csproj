@@ -6,9 +6,10 @@
     <Company>Jammary Consulting</Company>
     <Product>Simple Web App MVC</Product>
     <Description>Simple Web App MVC</Description>
-    <Copyright>(c) 2018 Adam A. Jammary</Copyright>
+    <Copyright>2018 Adam A. Jammary</Copyright>
     <PackageLicenseUrl></PackageLicenseUrl>
     <PackageProjectUrl>http://simple-web-app-mvc-dotnet.azurewebsites.net/</PackageProjectUrl>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

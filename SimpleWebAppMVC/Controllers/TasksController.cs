@@ -57,61 +57,13 @@ namespace SimpleWebAppMVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(string id)
         {
-            if (id == null)
+            if (string.IsNullOrWhiteSpace(id))
                 return NotFound();
 
             var taskModel = await this.dbContext.Tasks.SingleOrDefaultAsync(task => task.ID == id);
 
             if (taskModel == null)
                 return NotFound();
-
-            return View(taskModel);
-        }
-
-        /**
-         * GET: /Tasks/Edit/<id>
-         * @param id Task ID
-         */
-        [HttpGet]
-        public async Task<IActionResult> Edit(string id)
-        {
-            if (id == null)
-                return NotFound();
-
-            var taskModel = await this.dbContext.Tasks.SingleOrDefaultAsync(task => task.ID == id);
-
-            if (taskModel == null)
-                return NotFound();
-
-            return View(taskModel);
-        }
-
-        /**
-         * POST: /Tasks/Edit/<id>
-         * http://go.microsoft.com/fwlink/?LinkId=317598
-         * @param id        Task ID
-         * @param taskModel Task model
-         */
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("ID,Title,Description,Date,Status")] Models.Task taskModel)
-        {
-            if (id != taskModel.ID)
-                return NotFound();
-
-            if (ModelState.IsValid)
-            {
-                try {
-                    this.dbContext.Update(taskModel);
-                    await this.dbContext.SaveChangesAsync();
-                } catch (DbUpdateConcurrencyException) {
-                    if (!this.taskModelExists(taskModel.ID))
-                        return NotFound();
-                    else
-                        throw;
-                }
-
-                return RedirectToAction(nameof(Index));
-            }
 
             return View(taskModel);
         }
@@ -123,7 +75,7 @@ namespace SimpleWebAppMVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
-            if (id == null)
+            if (string.IsNullOrWhiteSpace(id))
                 return NotFound();
 
             var taskModel = await this.dbContext.Tasks.SingleOrDefaultAsync(task => task.ID == id);
@@ -147,6 +99,50 @@ namespace SimpleWebAppMVC.Controllers
             await this.dbContext.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
+        }
+
+        /**
+         * GET: /Tasks/Edit/<id>
+         * @param id Task ID
+         */
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+                return NotFound();
+
+            var taskModel = await this.dbContext.Tasks.SingleOrDefaultAsync(task => task.ID == id);
+
+            if (taskModel == null)
+                return NotFound();
+
+            return View(taskModel);
+        }
+
+        /**
+         * POST: /Tasks/Edit/<id>
+         * http://go.microsoft.com/fwlink/?LinkId=317598
+         * @param id        Task ID
+         * @param taskModel Task model
+         */
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, [Bind("ID,Title,Description,Date,Status")] Models.Task taskModel)
+        {
+            if (id != taskModel.ID)
+                return NotFound();
+
+            if (!this.dbContext.Tasks.Any(t => t.ID == id))
+                return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                this.dbContext.Update(taskModel);
+                await this.dbContext.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(taskModel);
         }
         
         /**
@@ -197,15 +193,6 @@ namespace SimpleWebAppMVC.Controllers
             }
 
             return tasks;
-        }
-
-        /**
-         * Returns the specified task if it exists.
-         * @param id Task ID
-         */
-        private bool taskModelExists(string id)
-        {
-            return this.dbContext.Tasks.Any(e => e.ID == id);
         }
     }
 }
