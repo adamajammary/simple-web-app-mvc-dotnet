@@ -159,7 +159,7 @@ namespace SimpleWebAppMVC.Controllers
 
             ViewData["sortJSON"] = sort;
 
-            return View(await this.getSorted(sort).ToListAsync());
+            return View(await this.GetSorted(sort).ToListAsync());
         }
 
         /**
@@ -169,14 +169,14 @@ namespace SimpleWebAppMVC.Controllers
         [HttpGet]
         public async Task<IActionResult> GetJSON(string sort)
         {
-            return Json(this.getSorted(sort).ToListAsync().Result);
+            return Json(await this.GetSorted(sort).ToListAsync());
         }
 
         /**
          * Returns a list of tasks sorted by the specified sort column and order.
          * @param sort Sort column and order
          */
-        private IQueryable<Models.Task> getSorted(string sort)
+        private IQueryable<Models.Task> GetSorted(string sort)
         {
             IQueryable<Models.Task> tasks = from task in this.dbContext.Tasks select task;
 
