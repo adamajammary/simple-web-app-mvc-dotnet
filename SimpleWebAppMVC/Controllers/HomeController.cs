@@ -43,7 +43,7 @@ namespace SimpleWebAppMVC.Controllers
         public IActionResult Index()
         {
             ViewData["message_short"] = "Welcome to my simple web app";
-            ViewData["message_long"]  = "This simple web app is made using ASP.NET Core 2.0 MVC and hosted on Azure Cloud Services.";
+            ViewData["message_long"]  = "This simple web app is made using ASP.NET Core 2.1 MVC and hosted on Azure Cloud Services.";
 
             return View();
         }
