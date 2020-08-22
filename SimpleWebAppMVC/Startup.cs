@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using SimpleWebAppMVC.Data;
 
 namespace SimpleWebAppMVC
@@ -33,7 +34,9 @@ namespace SimpleWebAppMVC
                 options => options.UseSqlServer(this.Configuration.GetConnectionString("DbConnection"))
             );
 
-            services.AddMvc();
+            services.AddMvc(
+                options => options.EnableEndpointRouting = false
+            );
         }
 
         /**
@@ -41,12 +44,11 @@ namespace SimpleWebAppMVC
          * @param app Application builder
          * @param env Hosting environment
          */
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             // ASPNETCORE_ENVIRONMENT = [ "Development" | "Production" ]
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                //.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
@@ -63,10 +65,9 @@ namespace SimpleWebAppMVC
             app.UseStaticFiles();
 
             // Register routes
-            app.UseMvc(routes => {
-                routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}");
-                //routes.MapRoute(name: "tasks",   template: "{controller=Tasks}/{action=Index}/{id?}");
-            });
+            app.UseMvc(
+                routes => routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}")
+            );
         }
     }
 }
