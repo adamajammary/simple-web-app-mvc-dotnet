@@ -13,13 +13,16 @@ namespace SimpleWebAppMVC.Controllers
         // GET /Home/About
         public IActionResult About()
         {
-            FileVersionInfo info  = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
-            About           model = new About();
+            string          location    = Assembly.GetExecutingAssembly().Location;
+            FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(location);
 
-            model.AppName   = info.ProductName;
-            model.Copyright = info.LegalCopyright;
-            model.Url       = "https://simple-web-app-mvc-dotnet.azurewebsites.net/";
-            model.Version   = ("Version " + info.ProductVersion);
+            About model = new About
+            {
+                AppName   = versionInfo.ProductName,
+                Copyright = versionInfo.LegalCopyright,
+                Url       = "https://www.jammary.com/",
+                Version   = ("Version " + versionInfo.ProductVersion)
+            };
 
             return View(model);
         }
@@ -36,14 +39,19 @@ namespace SimpleWebAppMVC.Controllers
         // GET /Home/Error
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            ErrorViewModel model = new ErrorViewModel
+            {
+                RequestId = (Activity.Current?.Id ?? HttpContext.TraceIdentifier)
+            };
+
+            return View(model);
         }
 
         // GET [ /, /Home/, /Home/Index ]
         public IActionResult Index()
         {
             ViewData["message_short"] = "Welcome to my simple web app";
-            ViewData["message_long"]  = "This simple web app is made using ASP.NET Core 2.1 MVC and hosted on Azure Cloud Services.";
+            ViewData["message_long"]  = "This simple web app is made using ASP.NET Core 3.1 MVC.";
 
             return View();
         }

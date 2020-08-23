@@ -1,0 +1,10 @@
+runtime: aspnetcore
+env: flex
+manual_scaling:
+  instances: 1
+resources:
+  cpu: 1
+  memory_gb: 0.5
+  disk_size_gb: 10
+beta_settings:
+  cloud_sql_instances: simple-web-app-mvc-dotnet:europe-west1:simple-web-app-mvc-dotnet-sqlserver=tcp:1433

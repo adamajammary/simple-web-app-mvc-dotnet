@@ -11,7 +11,9 @@ namespace SimpleWebAppMVC.Models
      */
     public class Task
     {
-        public string ID { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public string Id { get; set; }
 
         [StringLength(50, MinimumLength = 3), Required]
         public string Title { get; set; }
@@ -26,11 +28,9 @@ namespace SimpleWebAppMVC.Models
         public string Status { get; set; }
 
         [NotMapped]
-        public SelectList StatusCodes { get; } = new SelectList(
-            new List<string> {
-                "N/A", "Not Started", "Started", "In Progress", "Almost Done", "Completed"
-            }
-        );
+        public SelectList StatusCodes { get; } = new SelectList(new List<string> {
+            "N/A", "Not Started", "Started", "In Progress", "Almost Done", "Completed"
+        });
 
         public void Update(Task task)
         {
@@ -39,15 +39,5 @@ namespace SimpleWebAppMVC.Models
             this.Date        = task.Date;
             this.Status      = task.Status;
         }
-
-        /*public List<SelectListItem> StatusCodes { get; } = new List<SelectListItem>
-        {
-            new SelectListItem { Value = "N/A",         Text = "N/A" },
-            new SelectListItem { Value = "Not Started", Text = "Not Started" },
-            new SelectListItem { Value = "Started",     Text = "Started" },
-            new SelectListItem { Value = "In Progress", Text = "In Progress" },
-            new SelectListItem { Value = "Almost Done", Text = "Almost Done" },
-            new SelectListItem { Value = "Completed",   Text = "Completed" }
-        };*/
     }
 }

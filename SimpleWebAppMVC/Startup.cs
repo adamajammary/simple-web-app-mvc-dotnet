@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using SimpleWebAppMVC.Data;
 
 namespace SimpleWebAppMVC
@@ -29,11 +30,10 @@ namespace SimpleWebAppMVC
          */
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(
-                options => options.UseSqlServer(this.Configuration.GetConnectionString("DbConnection"))
-            );
+            string connectionString = this.Configuration.GetConnectionString("DbConnection");
 
-            services.AddMvc();
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+            services.AddMvc(options => options.EnableEndpointRouting = false);
         }
 
         /**
@@ -41,13 +41,14 @@ namespace SimpleWebAppMVC
          * @param app Application builder
          * @param env Hosting environment
          */
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             // ASPNETCORE_ENVIRONMENT = [ "Development" | "Production" ]
+            string jsonFile = (env.IsProduction() ? "appsettings.json" : $"appsettings.{env.EnvironmentName}.json");
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                //.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                .AddJsonFile(jsonFile, optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
             this.Configuration = builder.Build();
@@ -59,14 +60,11 @@ namespace SimpleWebAppMVC
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            // Allow the web server to use access static file paths in wwwroot folder
+            // Allow the web server to access static file paths in wwwroot folder
             app.UseStaticFiles();
 
             // Register routes
-            app.UseMvc(routes => {
-                routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}");
-                //routes.MapRoute(name: "tasks",   template: "{controller=Tasks}/{action=Index}/{id?}");
-            });
+            app.UseMvc(routes => routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}"));
         }
     }
 }
