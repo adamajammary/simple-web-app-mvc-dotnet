@@ -180,17 +180,18 @@ namespace SimpleWebAppMVC.Controllers
         {
             IQueryable<Models.Task> tasks = from task in this.dbContext.Tasks select task;
 
-            switch (sort) {
-                case "Title":            tasks = tasks.OrderBy(s => s.Title);                 break;
-                case "Title_desc":       tasks = tasks.OrderByDescending(s => s.Title);       break;
-                case "Description":      tasks = tasks.OrderBy(s => s.Description);           break;
-                case "Description_desc": tasks = tasks.OrderByDescending(s => s.Description); break;
-                case "Date":             tasks = tasks.OrderBy(s => s.Date);                  break;
-                case "Date_desc":        tasks = tasks.OrderByDescending(s => s.Date);        break;
-                case "Status":           tasks = tasks.OrderBy(s => s.Status);                break;
-                case "Status_desc":      tasks = tasks.OrderByDescending(s => s.Status);      break;
-                default:                 tasks = tasks.OrderBy(s => s.Title);                 break;
-            }
+            tasks = sort switch
+            {
+                "Title"            => tasks.OrderBy(s => s.Title),
+                "Title_desc"       => tasks.OrderByDescending(s => s.Title),
+                "Description"      => tasks.OrderBy(s => s.Description),
+                "Description_desc" => tasks.OrderByDescending(s => s.Description),
+                "Date"             => tasks.OrderBy(s => s.Date),
+                "Date_desc"        => tasks.OrderByDescending(s => s.Date),
+                "Status"           => tasks.OrderBy(s => s.Status),
+                "Status_desc"      => tasks.OrderByDescending(s => s.Status),
+                _                  => tasks.OrderBy(s => s.Title),
+            };
 
             return tasks;
         }
