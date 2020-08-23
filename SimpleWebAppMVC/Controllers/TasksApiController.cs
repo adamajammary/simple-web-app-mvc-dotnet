@@ -34,7 +34,7 @@ namespace SimpleWebAppMVC.Controllers
             if (string.IsNullOrWhiteSpace(id))
                 return NotFound();
 
-            var task = this.dbContext.Tasks.SingleOrDefault(t => t.ID == id);
+            var task = this.dbContext.Tasks.SingleOrDefault(t => t.Id == id);
 
             if (task == null)
                 return NotFound();
@@ -52,7 +52,7 @@ namespace SimpleWebAppMVC.Controllers
             this.dbContext.Add(taskModel);
             this.dbContext.SaveChanges();
 
-            return CreatedAtRoute("GetTask", new { id = taskModel.ID }, taskModel);
+            return CreatedAtRoute("GetTask", new { id = taskModel.Id }, taskModel);
         }
 
         // PUT api/Tasks/<id>
@@ -62,7 +62,7 @@ namespace SimpleWebAppMVC.Controllers
             if (string.IsNullOrWhiteSpace(id))
                 return NotFound();
 
-            var task = this.dbContext.Tasks.SingleOrDefault(t => t.ID == id);
+            var task = this.dbContext.Tasks.SingleOrDefault(t => t.Id == id);
 
             if (task == null)
                 return NotFound();
@@ -84,7 +84,7 @@ namespace SimpleWebAppMVC.Controllers
             if (string.IsNullOrWhiteSpace(id))
                 return NotFound();
 
-            var task = this.dbContext.Tasks.SingleOrDefault(t => t.ID == id);
+            var task = this.dbContext.Tasks.SingleOrDefault(t => t.Id == id);
 
             if (task == null)
                 return NotFound();

@@ -37,7 +37,7 @@ namespace SimpleWebAppMVC.Controllers
          * @param taskModel Task model
          */
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Title,Description,Date,Status")] Models.Task taskModel)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,Date,Status")] Models.Task taskModel)
         {
             if (ModelState.IsValid)
             {
@@ -52,7 +52,7 @@ namespace SimpleWebAppMVC.Controllers
 
         /**
          * GET: /Tasks/Details/<id>
-         * @param id Task ID
+         * @param id Task Id
          */
         [HttpGet]
         public async Task<IActionResult> Details(string id)
@@ -60,7 +60,7 @@ namespace SimpleWebAppMVC.Controllers
             if (string.IsNullOrWhiteSpace(id))
                 return NotFound();
 
-            var taskModel = await this.dbContext.Tasks.SingleOrDefaultAsync(task => task.ID == id);
+            var taskModel = await this.dbContext.Tasks.SingleOrDefaultAsync(task => task.Id == id);
 
             if (taskModel == null)
                 return NotFound();
@@ -70,7 +70,7 @@ namespace SimpleWebAppMVC.Controllers
 
         /**
          * GET: /Tasks/Delete/<id>
-         * @param id Task ID
+         * @param id Task Id
          */
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
@@ -78,7 +78,7 @@ namespace SimpleWebAppMVC.Controllers
             if (string.IsNullOrWhiteSpace(id))
                 return NotFound();
 
-            var taskModel = await this.dbContext.Tasks.SingleOrDefaultAsync(task => task.ID == id);
+            var taskModel = await this.dbContext.Tasks.SingleOrDefaultAsync(task => task.Id == id);
 
             if (taskModel == null)
                 return NotFound();
@@ -88,12 +88,12 @@ namespace SimpleWebAppMVC.Controllers
 
         /**
          * POST: /Tasks/Delete/<id>
-         * @param id Task ID
+         * @param id Task Id
          */
         [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var taskModel = await this.dbContext.Tasks.SingleOrDefaultAsync(task => task.ID == id);
+            var taskModel = await this.dbContext.Tasks.SingleOrDefaultAsync(task => task.Id == id);
 
             this.dbContext.Tasks.Remove(taskModel);
             await this.dbContext.SaveChangesAsync();
@@ -103,7 +103,7 @@ namespace SimpleWebAppMVC.Controllers
 
         /**
          * GET: /Tasks/Edit/<id>
-         * @param id Task ID
+         * @param id Task Id
          */
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
@@ -111,7 +111,7 @@ namespace SimpleWebAppMVC.Controllers
             if (string.IsNullOrWhiteSpace(id))
                 return NotFound();
 
-            var taskModel = await this.dbContext.Tasks.SingleOrDefaultAsync(task => task.ID == id);
+            var taskModel = await this.dbContext.Tasks.SingleOrDefaultAsync(task => task.Id == id);
 
             if (taskModel == null)
                 return NotFound();
@@ -122,16 +122,16 @@ namespace SimpleWebAppMVC.Controllers
         /**
          * POST: /Tasks/Edit/<id>
          * http://go.microsoft.com/fwlink/?LinkId=317598
-         * @param id        Task ID
+         * @param id        Task Id
          * @param taskModel Task model
          */
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("ID,Title,Description,Date,Status")] Models.Task taskModel)
+        public async Task<IActionResult> Edit(string id, [Bind("Id,Title,Description,Date,Status")] Models.Task taskModel)
         {
-            if (id != taskModel.ID)
+            if (id != taskModel.Id)
                 return NotFound();
 
-            if (!this.dbContext.Tasks.Any(t => t.ID == id))
+            if (!this.dbContext.Tasks.Any(t => t.Id == id))
                 return NotFound();
 
             if (ModelState.IsValid)

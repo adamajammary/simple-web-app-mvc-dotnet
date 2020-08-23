@@ -27,9 +27,11 @@ namespace SimpleWebAppMVC
                 // Create the database (if it does not already exist)
                 try {
                     var context = services.GetRequiredService<AppDbContext>();
+
                     context.Database.EnsureCreated();
                 } catch (InvalidOperationException ex) {
                     var logger = services.GetRequiredService<ILogger<Program>>();
+
                     logger.LogError(ex, "An error occurred creating the DB.");
                 }
             }
