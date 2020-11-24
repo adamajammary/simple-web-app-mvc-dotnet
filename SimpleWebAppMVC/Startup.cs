@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -59,6 +60,11 @@ namespace SimpleWebAppMVC
             } else {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            // https://tutexchange.com/how-to-host-asp-net-core-app-on-ubuntu-with-apache-webserver/
+            app.UseForwardedHeaders(new ForwardedHeadersOptions {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
             // Allow the web server to access static file paths in wwwroot folder
             app.UseStaticFiles();

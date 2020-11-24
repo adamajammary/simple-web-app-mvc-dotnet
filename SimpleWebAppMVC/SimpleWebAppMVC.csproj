@@ -23,8 +23,4 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="MKDIR &quot;$(TargetDir)publish&quot;&#xD;&#xA;COPY /Y &quot;$(SolutionDir)app.yaml&quot; &quot;$(TargetDir)publish&quot;" />
-  </Target>
-
 </Project>
