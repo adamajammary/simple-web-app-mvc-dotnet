@@ -31,9 +31,14 @@ namespace SimpleWebAppMVC
          */
         public void ConfigureServices(IServiceCollection services)
         {
+            bool   useMySQL         = this.Configuration.GetValue<bool>("UseMySQL");
             string connectionString = this.Configuration.GetConnectionString("DbConnection");
 
-            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+            if (useMySQL)
+                services.AddDbContext<AppDbContext>(options => options.UseMySql(connectionString));
+            else
+                services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+
             services.AddMvc(options => options.EnableEndpointRouting = false);
         }
 
