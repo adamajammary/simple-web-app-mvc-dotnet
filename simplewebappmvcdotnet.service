@@ -1,0 +1,16 @@
+[Unit]
+Description=Running ASP.NET Core on Ubuntu with Apache
+
+[Service]
+WorkingDirectory=/var/www/simple-web-app-mvc-dotnet
+ExecStart=/usr/bin/dotnet /var/www/simple-web-app-mvc-dotnet/SimpleWebAppMVC.dll
+Restart=always
+RestartSec=10
+KillSignal=SIGINT
+SyslogIdentifier=simple-web-app-mvc-dotnet
+User=www-data
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+
+[Install]
+WantedBy=multi-user.target
