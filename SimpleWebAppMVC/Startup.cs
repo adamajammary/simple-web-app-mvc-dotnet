@@ -61,6 +61,7 @@ namespace SimpleWebAppMVC
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            // https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-apache?view=aspnetcore-3.1
             // https://tutexchange.com/how-to-host-asp-net-core-app-on-ubuntu-with-apache-webserver/
             app.UseForwardedHeaders(new ForwardedHeadersOptions {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
