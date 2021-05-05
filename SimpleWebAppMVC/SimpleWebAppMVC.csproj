@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AspNetCoreHostingModel>OutProcess</AspNetCoreHostingModel>
     <Authors>Adam A. Jammary</Authors>
     <Company>Jammary Studio</Company>
     <Product>Simple Web App MVC</Product>
