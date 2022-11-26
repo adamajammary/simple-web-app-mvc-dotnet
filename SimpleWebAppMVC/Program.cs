@@ -9,10 +9,6 @@ namespace SimpleWebAppMVC
 {
     public class Program
     {
-        /**
-         * Builds the web host using the specified arguments and Startup class.
-         * @param args Arguments
-         */
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args).UseStartup<Startup>().Build();
 
@@ -29,10 +25,10 @@ namespace SimpleWebAppMVC
                     var context = services.GetRequiredService<AppDbContext>();
 
                     context.Database.EnsureCreated();
-                } catch (InvalidOperationException ex) {
+                } catch (InvalidOperationException e) {
                     var logger = services.GetRequiredService<ILogger<Program>>();
 
-                    logger.LogError(ex, "An error occurred creating the DB.");
+                    logger.LogError(e, "An error occurred creating the DB.");
                 }
             }
 

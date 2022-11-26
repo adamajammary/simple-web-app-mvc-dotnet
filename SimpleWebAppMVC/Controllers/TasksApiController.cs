@@ -1,7 +1,6 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using SimpleWebAppMVC.Data;
+using System.Linq;
 
 namespace SimpleWebAppMVC.Controllers
 {
@@ -11,23 +10,20 @@ namespace SimpleWebAppMVC.Controllers
     {
         private readonly AppDbContext dbContext;
 
-        /**
-         * TasksApiController constructor.
-         * @param dbCtx Application database context
-         */
         public TasksApiController(AppDbContext dbCtx)
         {
             this.dbContext = dbCtx;
         }
 
-        // GET api/Tasks
+        /// <summary>Returns a list of all the tasks</summary>
         [HttpGet]
         public JsonResult Get()
         {
             return Json(from task in this.dbContext.Tasks select task);
         }
 
-        // GET api/Tasks/<id>
+        /// <summary>Returns the task with the specified ID if it exists</summary>
+        /// <param name="id">Task ID</param>
         [HttpGet("{id}", Name = "GetTask")]
         public IActionResult Get(string id)
         {
@@ -42,22 +38,27 @@ namespace SimpleWebAppMVC.Controllers
             return Json(task);
         }
 
-        // POST api/Tasks
+        /// <summary>Adds a new task</summary>
+        /// <param name="newTask">New task</param>
         [HttpPost]
-        public IActionResult Post([FromBody] Models.Task taskModel)
+        public IActionResult Post([FromBody] Models.Task newTask)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            this.dbContext.Add(taskModel);
+            var task = new Models.TaskDbModel(newTask);
+
+            this.dbContext.Add(task);
             this.dbContext.SaveChanges();
 
-            return CreatedAtRoute("GetTask", new { id = taskModel.Id }, taskModel);
+            return CreatedAtRoute("GetTask", new { id = task.Id }, task);
         }
 
-        // PUT api/Tasks/<id>
+        /// <summary>Updates the task with the specified ID if it exists</summary>
+        /// <param name="id">Task ID</param>
+        /// <param name="updatedTask">Updated task</param>
         [HttpPut("{id}")]
-        public IActionResult Put(string id, [FromBody] Models.Task taskModel)
+        public IActionResult Put(string id, [FromBody] Models.Task updatedTask)
         {
             if (string.IsNullOrWhiteSpace(id))
                 return NotFound();
@@ -70,14 +71,16 @@ namespace SimpleWebAppMVC.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            task.Update(taskModel);
+            task.Update(updatedTask);
+
             this.dbContext.Update(task);
             this.dbContext.SaveChanges();
 
             return Ok();
         }
 
-        // DELETE api/Tasks/<id>
+        /// <summary>Deletes the task with the specified ID if it exists</summary>
+        /// <param name="id">Task ID</param>
         [HttpDelete("{id}")]
         public IActionResult Delete(string id)
         {
