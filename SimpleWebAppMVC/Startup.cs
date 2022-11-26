@@ -35,7 +35,7 @@ namespace SimpleWebAppMVC
             string connectionString = this.Configuration.GetConnectionString("DbConnection");
 
             if (useMySQL)
-                services.AddDbContext<AppDbContext>(options => options.UseMySql(connectionString));
+                services.AddDbContext<AppDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
             else
                 services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
@@ -66,7 +66,7 @@ namespace SimpleWebAppMVC
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            // https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-apache?view=aspnetcore-3.1
+            // https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-apache?view=aspnetcore-7.0
             // https://tutexchange.com/how-to-host-asp-net-core-app-on-ubuntu-with-apache-webserver/
             app.UseForwardedHeaders(new ForwardedHeadersOptions {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
