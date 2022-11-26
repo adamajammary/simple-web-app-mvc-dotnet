@@ -9,44 +9,41 @@ using SimpleWebAppMVC.Data;
 
 namespace SimpleWebAppMVC
 {
-    /**
-     * Configures services and the app request pipeline.
-     */
     public class Startup
     {
         public IConfiguration Configuration { get; set; }
 
-        /**
-         * Startup constructor.
-         * @param configuration Configuration
-         */
         public Startup(IConfiguration config)
         {
             this.Configuration = config;
         }
 
-        /**
-         * Adds services to the container.
-         * @param services Service collection
-         */
         public void ConfigureServices(IServiceCollection services)
         {
+            // DB context
             bool   useMySQL         = this.Configuration.GetValue<bool>("UseMySQL");
             string connectionString = this.Configuration.GetConnectionString("DbConnection");
 
             if (useMySQL)
-                services.AddDbContext<AppDbContext>(options => options.UseMySql(connectionString));
+                services.AddDbContext<AppDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
             else
                 services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
+            // MVC
             services.AddMvc(options => options.EnableEndpointRouting = false);
+
+            // Swagger UI
+            services.AddSwaggerDocument(config =>
+            {
+                config.PostProcess = document =>
+                {
+                    document.Info.Title       = "Simple Web API";
+                    document.Info.Description = "A simple ASP.NET web API";
+                    document.Info.Version     = "v1";
+                };
+            });
         }
 
-        /**
-         * Configures the HTTP request pipeline.
-         * @param app Application builder
-         * @param env Hosting environment
-         */
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             // ASPNETCORE_ENVIRONMENT = [ "Development" | "Production" ]
@@ -66,7 +63,7 @@ namespace SimpleWebAppMVC
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            // https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-apache?view=aspnetcore-3.1
+            // https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-apache?view=aspnetcore-7.0
             // https://tutexchange.com/how-to-host-asp-net-core-app-on-ubuntu-with-apache-webserver/
             app.UseForwardedHeaders(new ForwardedHeadersOptions {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
@@ -74,6 +71,10 @@ namespace SimpleWebAppMVC
 
             // Allow the web server to access static file paths in wwwroot folder
             app.UseStaticFiles();
+
+            // Swagger UI
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
 
             // Register routes
             app.UseMvc(routes => routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}"));

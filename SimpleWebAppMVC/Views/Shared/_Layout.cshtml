@@ -35,14 +35,15 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
+
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Simple Web App MVC</a>
             </div>
 
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Tasks" asp-action="Index">Tasks</a></li>
-                    <li><a asp-area="" asp-controller="Home"  asp-action="API">API</a></li>
                     <li><a asp-area="" asp-controller="Home"  asp-action="About">About</a></li>
+                    <li><a href="/swagger/index.html#/TasksApi/TasksApi_Get" target="_blank" rel="noreferrer noopener">API</a></li>
                 </ul>
             </div>
         </div>

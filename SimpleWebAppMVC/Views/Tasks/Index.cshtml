@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SimpleWebAppMVC.Models.Task>
+﻿@model IEnumerable<SimpleWebAppMVC.Models.TaskDbModel>
 
 @{
     ViewData["Title"] = "Tasks";
@@ -37,5 +37,5 @@
         </tbody>
     </table>
 
-    <div>@Html.ActionLink("Download JSON", "GetJSON", new { sort = @ViewData["sortJSON"] })</div>
+    <div>@Html.ActionLink("Download JSON", "GetJSON", new { sort = @ViewData["sortJSON"] }, new { target="_blank" })</div>
 </div>

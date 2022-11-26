@@ -1,134 +1,111 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SimpleWebAppMVC.Data;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SimpleWebAppMVC.Controllers
 {
-    /**
-     * Tasks Controller
-     */
+    // ValidateAntiForgeryToken: http://go.microsoft.com/fwlink/?LinkId=317598
+
     public class TasksController : Controller
     {
         private readonly AppDbContext dbContext;
 
-        /**
-         * TasksController constructor.
-         * @param dbCtx Application database context
-         */
         public TasksController(AppDbContext dbCtx)
         {
             this.dbContext = dbCtx;
         }
 
-        /**
-         * GET: /Tasks/Create
-         */
+        // GET /Tasks/Create
         [HttpGet]
         public IActionResult Create()
         {
             return View(new Models.Task());
         }
 
-        /**
-         * POST: /Tasks/Create
-         * http://go.microsoft.com/fwlink/?LinkId=317598
-         * @param taskModel Task model
-         */
+        // POST /Tasks/Create
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Date,Status")] Models.Task taskModel)
+        public async Task<IActionResult> Create([Bind("Title,Description,Date,Status")] Models.Task newTask)
         {
             if (ModelState.IsValid)
             {
-                this.dbContext.Add(taskModel);
+                var task = new Models.TaskDbModel(newTask);
+
+                this.dbContext.Add(task);
+
                 await this.dbContext.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(taskModel);
+            return View(newTask);
         }
 
-        /**
-         * GET: /Tasks/Details/<id>
-         * @param id Task Id
-         */
+        // GET /Tasks/Details/<id>
         [HttpGet]
         public async Task<IActionResult> Details(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
                 return NotFound();
 
-            var taskModel = await this.dbContext.Tasks.SingleOrDefaultAsync(task => task.Id == id);
+            var task = await this.dbContext.Tasks.SingleOrDefaultAsync(task => task.Id == id);
 
-            if (taskModel == null)
+            if (task == null)
                 return NotFound();
 
-            return View(taskModel);
+            return View(task);
         }
 
-        /**
-         * GET: /Tasks/Delete/<id>
-         * @param id Task Id
-         */
+        // GET /Tasks/Delete/<id>
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
                 return NotFound();
 
-            var taskModel = await this.dbContext.Tasks.SingleOrDefaultAsync(task => task.Id == id);
+            var task = await this.dbContext.Tasks.SingleOrDefaultAsync(task => task.Id == id);
 
-            if (taskModel == null)
+            if (task == null)
                 return NotFound();
 
-            return View(taskModel);
+            return View(task);
         }
 
-        /**
-         * POST: /Tasks/Delete/<id>
-         * @param id Task Id
-         */
+        // POST /Tasks/Delete/<id>
         [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var taskModel = await this.dbContext.Tasks.SingleOrDefaultAsync(task => task.Id == id);
+            var task = await this.dbContext.Tasks.SingleOrDefaultAsync(task => task.Id == id);
 
-            this.dbContext.Tasks.Remove(taskModel);
+            this.dbContext.Tasks.Remove(task);
+
             await this.dbContext.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }
 
-        /**
-         * GET: /Tasks/Edit/<id>
-         * @param id Task Id
-         */
+        // GET /Tasks/Edit/<id>
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
                 return NotFound();
 
-            var taskModel = await this.dbContext.Tasks.SingleOrDefaultAsync(task => task.Id == id);
+            var task = await this.dbContext.Tasks.SingleOrDefaultAsync(task => task.Id == id);
 
-            if (taskModel == null)
+            if (task == null)
                 return NotFound();
 
-            return View(taskModel);
+            return View(task);
         }
 
-        /**
-         * POST: /Tasks/Edit/<id>
-         * http://go.microsoft.com/fwlink/?LinkId=317598
-         * @param id        Task Id
-         * @param taskModel Task model
-         */
+        // POST /Tasks/Edit/<id>
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,Title,Description,Date,Status")] Models.Task taskModel)
+        public async Task<IActionResult> Edit(string id, [Bind("Id,Title,Description,Date,Status")] Models.TaskDbModel task)
         {
-            if (id != taskModel.Id)
+            if (id != task.Id)
                 return NotFound();
 
             if (!this.dbContext.Tasks.Any(t => t.Id == id))
@@ -136,19 +113,17 @@ namespace SimpleWebAppMVC.Controllers
 
             if (ModelState.IsValid)
             {
-                this.dbContext.Update(taskModel);
+                this.dbContext.Update(task);
+
                 await this.dbContext.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(taskModel);
+            return View(task);
         }
         
-        /**
-         * GET: [ /Tasks/, /Tasks/Index ]
-         * @param sort Sort column and order
-         */
+        // GET [ /Tasks/, /Tasks/Index ]
         [HttpGet]
         public async Task<IActionResult> Index(string sort)
         {
@@ -162,23 +137,18 @@ namespace SimpleWebAppMVC.Controllers
             return View(await this.GetSorted(sort).ToListAsync());
         }
 
-        /**
-         * GET: /Tasks/GetJSON/<sort>
-         * @param sort Sort column and order
-         */
+        // GET /Tasks/GetJSON/<sort>
         [HttpGet]
         public async Task<IActionResult> GetJSON(string sort)
         {
             return Json(await this.GetSorted(sort).ToListAsync());
         }
 
-        /**
-         * Returns a list of tasks sorted by the specified sort column and order.
-         * @param sort Sort column and order
-         */
-        private IQueryable<Models.Task> GetSorted(string sort)
+        /// <param name="sort">Sort column and order</param>
+        /// <returns>a list of tasks sorted by the specified sort column and order</returns>
+        private IQueryable<Models.TaskDbModel> GetSorted(string sort)
         {
-            IQueryable<Models.Task> tasks = from task in this.dbContext.Tasks select task;
+            var tasks = from task in this.dbContext.Tasks select task;
 
             tasks = sort switch
             {
