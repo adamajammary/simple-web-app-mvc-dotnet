@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NSwag;
 using SimpleWebAppMVC.Data;
 
 namespace SimpleWebAppMVC
@@ -33,10 +34,8 @@ namespace SimpleWebAppMVC
             services.AddMvc(options => options.EnableEndpointRouting = false);
 
             // Swagger UI
-            services.AddSwaggerDocument(config =>
-            {
-                config.PostProcess = document =>
-                {
+            services.AddSwaggerDocument(settings => {
+                settings.PostProcess = document => {
                     document.Info.Title       = "Simple Web API";
                     document.Info.Description = "A simple ASP.NET web API";
                     document.Info.Version     = "v1";
@@ -73,7 +72,14 @@ namespace SimpleWebAppMVC
             app.UseStaticFiles();
 
             // Swagger UI
-            app.UseOpenApi();
+            app.UseOpenApi(settings => {
+                settings.PostProcess = (document, _) => {
+                    document.Schemes = new[] {
+                        env.IsDevelopment() ? OpenApiSchema.Http : OpenApiSchema.Https
+                    };
+                };
+            });
+
             app.UseSwaggerUi3();
 
             // Register routes
