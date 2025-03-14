@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using SimpleWebAppMVC.Validation;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using SimpleWebAppMVC.Validation;
 
 namespace SimpleWebAppMVC.Models
 {

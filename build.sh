@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ENV=Release
-DOTNET=net7.0
+DOTNET=net9.0
 OUT=/var/www/simple-web-app-mvc-dotnet
 TARGET=linux-x64
 
