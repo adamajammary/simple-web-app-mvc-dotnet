@@ -10,14 +10,9 @@ using SimpleWebAppMVC.Data;
 
 namespace SimpleWebAppMVC
 {
-    public class Startup
+    public class Startup(IConfiguration config)
     {
-        public IConfiguration Configuration { get; set; }
-
-        public Startup(IConfiguration config)
-        {
-            this.Configuration = config;
-        }
+        public IConfiguration Configuration { get; set; } = config;
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -56,13 +51,12 @@ namespace SimpleWebAppMVC
             this.Configuration = builder.Build();
 
             if (env.IsDevelopment()) {
-                app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
             } else {
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            // https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-apache?view=aspnetcore-7.0
+            // https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-apache?view=aspnetcore-9.0
             // https://tutexchange.com/how-to-host-asp-net-core-app-on-ubuntu-with-apache-webserver/
             app.UseForwardedHeaders(new ForwardedHeadersOptions {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
@@ -74,13 +68,13 @@ namespace SimpleWebAppMVC
             // Swagger UI
             app.UseOpenApi(settings => {
                 settings.PostProcess = (document, _) => {
-                    document.Schemes = new[] {
+                    document.Schemes = [
                         env.IsDevelopment() ? OpenApiSchema.Http : OpenApiSchema.Https
-                    };
+                    ];
                 };
             });
 
-            app.UseSwaggerUi3();
+            app.UseSwaggerUi();
 
             // Register routes
             app.UseMvc(routes => routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}"));

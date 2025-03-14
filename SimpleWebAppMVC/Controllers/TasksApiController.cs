@@ -6,14 +6,9 @@ namespace SimpleWebAppMVC.Controllers
 {
     [Produces("application/json")]
     [Route("api/Tasks")]
-    public class TasksApiController : Controller
+    public class TasksApiController(AppDbContext dbCtx) : Controller
     {
-        private readonly AppDbContext dbContext;
-
-        public TasksApiController(AppDbContext dbCtx)
-        {
-            this.dbContext = dbCtx;
-        }
+        private readonly AppDbContext dbContext = dbCtx;
 
         /// <summary>Returns a list of all the tasks</summary>
         [HttpGet]

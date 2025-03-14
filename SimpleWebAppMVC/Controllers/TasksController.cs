@@ -9,14 +9,9 @@ namespace SimpleWebAppMVC.Controllers
 {
     // ValidateAntiForgeryToken: http://go.microsoft.com/fwlink/?LinkId=317598
 
-    public class TasksController : Controller
+    public class TasksController(AppDbContext dbCtx) : Controller
     {
-        private readonly AppDbContext dbContext;
-
-        public TasksController(AppDbContext dbCtx)
-        {
-            this.dbContext = dbCtx;
-        }
+        private readonly AppDbContext dbContext = dbCtx;
 
         // GET /Tasks/Create
         [HttpGet]
