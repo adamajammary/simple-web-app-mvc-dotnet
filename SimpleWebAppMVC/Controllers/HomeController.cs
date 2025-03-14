@@ -18,7 +18,7 @@ namespace SimpleWebAppMVC.Controllers
                 AppName   = versionInfo.ProductName,
                 Copyright = versionInfo.LegalCopyright,
                 Url       = "https://www.jammary.com/",
-                Version   = ("Version " + versionInfo.ProductVersion)
+                Version   = string.Format("Version {0}.{1}.{2}", versionInfo.ProductMajorPart, versionInfo.ProductMinorPart, versionInfo.ProductBuildPart)
             };
 
             return View(model);
