@@ -23,6 +23,10 @@ select {
     padding-right: 15px;
 }
 
+.dark-background a {
+    color: white !important;
+}
+
 .jumbotron {
     color: #000;
 }
