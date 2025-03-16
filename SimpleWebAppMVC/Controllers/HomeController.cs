@@ -10,15 +10,15 @@ namespace SimpleWebAppMVC.Controllers
         // GET /Home/About
         public IActionResult About()
         {
-            var location    = Assembly.GetExecutingAssembly().Location;
-            var versionInfo = FileVersionInfo.GetVersionInfo(location);
+            var location = Assembly.GetExecutingAssembly().Location;
+            var info     = FileVersionInfo.GetVersionInfo(location);
 
             var model = new About
             {
-                AppName   = versionInfo.ProductName,
-                Copyright = versionInfo.LegalCopyright,
+                AppName   = info.ProductName,
+                Copyright = info.LegalCopyright,
                 Url       = "https://www.jammary.com/",
-                Version   = string.Format("Version {0}.{1}.{2}", versionInfo.ProductMajorPart, versionInfo.ProductMinorPart, versionInfo.ProductBuildPart)
+                Version   = string.Format("Version {0}.{1}.{2}", info.ProductMajorPart, info.ProductMinorPart, info.ProductBuildPart)
             };
 
             return View(model);
@@ -38,8 +38,8 @@ namespace SimpleWebAppMVC.Controllers
         // GET [ /, /Home/, /Home/Index ]
         public IActionResult Index()
         {
-            ViewData["message_short"] = "Welcome to my simple web app";
-            ViewData["message_long"]  = "This simple web app is made using ASP.NET 9.0 MVC.";
+            ViewBag.Header      = "Welcome to my simple web app";
+            ViewBag.Description = "This simple web app is made using ASP.NET 9.0 MVC.";
 
             return View();
         }

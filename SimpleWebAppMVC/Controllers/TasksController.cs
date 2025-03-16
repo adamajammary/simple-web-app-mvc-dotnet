@@ -122,12 +122,12 @@ namespace SimpleWebAppMVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(string sort)
         {
-            ViewBag.TitleSortParm       = (sort == "Title"       ? "Title_desc"       : "Title");
-            ViewBag.DescriptionSortParm = (sort == "Description" ? "Description_desc" : "Description");
-            ViewBag.DateSortParm        = (sort == "Date"        ? "Date_desc"        : "Date");
-            ViewBag.StatusSortParm      = (sort == "Status"      ? "Status_desc"      : "Status");
+            ViewBag.TitleSort       = (sort == "title"       ? "title_desc"       : "title");
+            ViewBag.DescriptionSort = (sort == "description" ? "description_desc" : "description");
+            ViewBag.DateSort        = (sort == "date"        ? "date_desc"        : "date");
+            ViewBag.StatusSort      = (sort == "status"      ? "status_desc"      : "status");
 
-            ViewData["sortJSON"] = sort;
+            ViewBag.Sort = sort;
 
             return View(await this.GetSorted(sort).ToListAsync());
         }
@@ -147,14 +147,14 @@ namespace SimpleWebAppMVC.Controllers
 
             tasks = sort switch
             {
-                "Title"            => tasks.OrderBy(s => s.Title),
-                "Title_desc"       => tasks.OrderByDescending(s => s.Title),
-                "Description"      => tasks.OrderBy(s => s.Description),
-                "Description_desc" => tasks.OrderByDescending(s => s.Description),
-                "Date"             => tasks.OrderBy(s => s.Date),
-                "Date_desc"        => tasks.OrderByDescending(s => s.Date),
-                "Status"           => tasks.OrderBy(s => s.Status),
-                "Status_desc"      => tasks.OrderByDescending(s => s.Status),
+                "title"            => tasks.OrderBy(s => s.Title),
+                "title_desc"       => tasks.OrderByDescending(s => s.Title),
+                "description"      => tasks.OrderBy(s => s.Description),
+                "description_desc" => tasks.OrderByDescending(s => s.Description),
+                "date"             => tasks.OrderBy(s => s.Date),
+                "date_desc"        => tasks.OrderByDescending(s => s.Date),
+                "status"           => tasks.OrderBy(s => s.Status),
+                "status_desc"      => tasks.OrderByDescending(s => s.Status),
                 _                  => tasks.OrderBy(s => s.Title),
             };
 

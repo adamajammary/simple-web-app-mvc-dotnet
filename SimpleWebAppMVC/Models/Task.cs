@@ -3,6 +3,7 @@ using SimpleWebAppMVC.Validation;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace SimpleWebAppMVC.Models
 {
@@ -24,7 +25,7 @@ namespace SimpleWebAppMVC.Models
         [ValidateStatusCodes, Required]
         public string Status { get; set; }
 
-        [NotMapped]
+        [JsonIgnore, NotMapped]
         internal SelectList StatusCodes { get; } = new SelectList(ValidateStatusCodesAttribute.ValidStatusCodes);
     }
 }

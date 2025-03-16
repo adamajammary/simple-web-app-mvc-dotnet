@@ -1,10 +1,10 @@
 ﻿@model SimpleWebAppMVC.Models.Task
 
 @{
-    ViewData["Title"] = "Create Task";
+    ViewData["title"] = "Create Task";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2>@ViewData["title"]</h2>
 <hr />
 
 <div class="row">
@@ -42,7 +42,7 @@
     </div>
 </div>
 
-<div><a asp-action="Index">Back to List</a></div>
+<div><a asp-action="Index" style="color: white">Back to List</a></div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

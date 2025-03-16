@@ -1,10 +1,10 @@
-﻿@model IEnumerable<SimpleWebAppMVC.Models.TaskDbModel>
+﻿@model IEnumerable<TaskDbModel>
 
 @{
-    ViewData["Title"] = "Tasks";
+    ViewData["title"] = "Tasks";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2>@ViewData["title"]</h2>
 
 <div class="jumbotron">
     <p><a asp-action="Create">Create New</a></p>
@@ -12,10 +12,10 @@
     <table class="table">
         <thead>
             <tr>
-                <th>@Html.ActionLink("Title",       "Index", new { sort = ViewBag.TitleSortParm })</th>
-                <th>@Html.ActionLink("Description", "Index", new { sort = ViewBag.DescriptionSortParm })</th>
-                <th>@Html.ActionLink("Date",        "Index", new { sort = ViewBag.DateSortParm })</th>
-                <th>@Html.ActionLink("Status",      "Index", new { sort = ViewBag.StatusSortParm })</th>
+                <th>@Html.ActionLink("Title",       "Index", new { sort = ViewBag.TitleSort })</th>
+                <th>@Html.ActionLink("Description", "Index", new { sort = ViewBag.DescriptionSort })</th>
+                <th>@Html.ActionLink("Date",        "Index", new { sort = ViewBag.DateSort })</th>
+                <th>@Html.ActionLink("Status",      "Index", new { sort = ViewBag.StatusSort })</th>
                 <th></th>
             </tr>
         </thead>
@@ -37,5 +37,5 @@
         </tbody>
     </table>
 
-    <div>@Html.ActionLink("Download JSON", "GetJSON", new { sort = @ViewData["sortJSON"] }, new { target="_blank" })</div>
+    <div>@Html.ActionLink("Download JSON", "GetJSON", new { sort = ViewBag.Sort }, new { target = "_blank" })</div>
 </div>

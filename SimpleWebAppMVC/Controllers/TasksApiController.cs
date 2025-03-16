@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SimpleWebAppMVC.Data;
+using SimpleWebAppMVC.Models;
 using System.Linq;
 
 namespace SimpleWebAppMVC.Controllers
@@ -36,12 +37,12 @@ namespace SimpleWebAppMVC.Controllers
         /// <summary>Adds a new task</summary>
         /// <param name="newTask">New task</param>
         [HttpPost]
-        public IActionResult Post([FromBody] Models.Task newTask)
+        public IActionResult Post([FromBody] Task newTask)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var task = new Models.TaskDbModel(newTask);
+            var task = new TaskDbModel(newTask);
 
             this.dbContext.Add(task);
             this.dbContext.SaveChanges();
@@ -53,7 +54,7 @@ namespace SimpleWebAppMVC.Controllers
         /// <param name="id">Task ID</param>
         /// <param name="updatedTask">Updated task</param>
         [HttpPut("{id}")]
-        public IActionResult Put(string id, [FromBody] Models.Task updatedTask)
+        public IActionResult Put(string id, [FromBody] Task updatedTask)
         {
             if (string.IsNullOrWhiteSpace(id))
                 return NotFound();
