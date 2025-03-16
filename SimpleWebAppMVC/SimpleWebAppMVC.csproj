@@ -9,7 +9,7 @@
     <Copyright>2018 Adam A. Jammary</Copyright>
     <PackageLicenseUrl></PackageLicenseUrl>
     <PackageProjectUrl>https://www.jammary.com/</PackageProjectUrl>
-    <Version>1.0.5</Version>
+    <Version>1.0.6</Version>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <PrepareForBuildDependsOn>$(PrepareForBuildDependsOn);BundleMinify</PrepareForBuildDependsOn>
