@@ -12,7 +12,7 @@ using SimpleWebAppMVC.Data;
 namespace SimpleWebAppMVC.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250418123816_AuthIdentity")]
+    [Migration("20250421103718_AuthIdentity")]
     partial class AuthIdentity
     {
         /// <inheritdoc />
@@ -230,7 +230,6 @@ namespace SimpleWebAppMVC.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Date")
