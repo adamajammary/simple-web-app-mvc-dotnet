@@ -36,9 +36,9 @@ namespace SimpleWebAppMVC
 
             // Swagger
 
-            services.AddOpenApiDocument(settings => {
-                settings.AddSecurity("Bearer", new OpenApiSecurityScheme
-                {
+            services.AddOpenApiDocument(settings =>
+            {
+                settings.AddSecurity("Bearer", new OpenApiSecurityScheme {
                     Name         = "Authorization",
                     Type         = OpenApiSecuritySchemeType.ApiKey,
                     Scheme       = "Bearer",
@@ -63,11 +63,11 @@ namespace SimpleWebAppMVC
                 options.User.RequireUniqueEmail = true;
             }).AddEntityFrameworkStores<AppDbContext>();
 
-            services.AddAuthentication().AddCookie().AddJwtBearer(options => {
+            services.AddAuthentication().AddCookie().AddJwtBearer(options =>
+            {
                 var tokenSettings = this.config.GetRequiredSection("Token");
 
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
+                options.TokenValidationParameters = new TokenValidationParameters {
                     ValidateAudience         = true,
                     ValidateIssuer           = true,
                     ValidateIssuerSigningKey = true,
@@ -120,9 +120,7 @@ namespace SimpleWebAppMVC
 
             app.UseOpenApi(settings => {
                 settings.PostProcess = (document, _) => {
-                    document.Schemes = [
-                        env.IsDevelopment() ? OpenApiSchema.Http : OpenApiSchema.Https
-                    ];
+                    document.Schemes = [ env.IsDevelopment() ? OpenApiSchema.Http : OpenApiSchema.Https ];
                 };
             });
 

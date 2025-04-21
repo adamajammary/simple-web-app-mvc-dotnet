@@ -11,7 +11,7 @@ namespace SimpleWebAppMVC.Controllers
 {
     // ValidateAntiForgeryToken: http://go.microsoft.com/fwlink/?LinkId=317598
 
-    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+    [Authorize]
     public class TasksController(AppDbContext dbCtx) : Controller
     {
         private readonly AppDbContext dbContext = dbCtx;
