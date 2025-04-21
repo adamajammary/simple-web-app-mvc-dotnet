@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 
 namespace SimpleWebAppMVC.Models
 {
-    public class Task
+    public class TaskModel
     {
         /// <example>Task #1</example>
         [StringLength(50, MinimumLength = 3), Required]

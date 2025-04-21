@@ -1,6 +1,6 @@
 ﻿namespace SimpleWebAppMVC.Models
 {
-    public class About
+    public class AboutModel
     {
         public string AppName   { get; set; }
         public string Copyright { get; set; }
