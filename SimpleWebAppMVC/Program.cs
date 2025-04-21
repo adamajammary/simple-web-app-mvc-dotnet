@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SimpleWebAppMVC.Data;
@@ -24,7 +25,7 @@ namespace SimpleWebAppMVC
                 try {
                     var context = services.GetRequiredService<AppDbContext>();
 
-                    context.Database.EnsureCreated();
+                    context.Database.Migrate();
                 } catch (InvalidOperationException e) {
                     var logger = services.GetRequiredService<ILogger<Program>>();
 

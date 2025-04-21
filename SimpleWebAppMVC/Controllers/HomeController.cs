@@ -8,12 +8,13 @@ namespace SimpleWebAppMVC.Controllers
     public class HomeController : Controller
     {
         // GET /Home/About
+        [HttpGet]
         public IActionResult About()
         {
             var location = Assembly.GetExecutingAssembly().Location;
             var info     = FileVersionInfo.GetVersionInfo(location);
 
-            var model = new About
+            var model = new AboutModel
             {
                 AppName   = info.ProductName,
                 Copyright = info.LegalCopyright,
@@ -25,6 +26,7 @@ namespace SimpleWebAppMVC.Controllers
         }
 
         // GET /Home/Error
+        [HttpGet]
         public IActionResult Error()
         {
             var model = new ErrorViewModel
@@ -36,6 +38,7 @@ namespace SimpleWebAppMVC.Controllers
         }
 
         // GET [ /, /Home/, /Home/Index ]
+        [HttpGet]
         public IActionResult Index()
         {
             ViewBag.Header      = "Welcome to my simple web app";

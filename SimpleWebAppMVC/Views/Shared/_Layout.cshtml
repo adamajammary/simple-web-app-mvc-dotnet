@@ -40,10 +40,21 @@
             </div>
 
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
+                <ul id="Navigation" class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Tasks" asp-action="Index">Tasks</a></li>
                     <li><a asp-area="" asp-controller="Home"  asp-action="About">About</a></li>
-                    <li><a href="/swagger/index.html#/TasksApi/TasksApi_Get" target="_blank" rel="noreferrer noopener">API</a></li>
+
+                    <li><a href="/swagger/index.html" target="_blank" rel="noreferrer noopener">REST API</a></li>
+
+                    <li class="flex-1"></li>
+
+                    @if (Context.User.Identity.IsAuthenticated) {
+                        <li class="user">@Context.User.Identity.Name</li>
+                        <li><a asp-area="" asp-controller="Account" asp-action="Logout">Sign Out</a></li>
+                    } else {
+                        <li><a class="register" asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
+                        <li><a asp-area="" asp-controller="Account" asp-action="Login">Sign In</a></li>
+                    }
                 </ul>
             </div>
         </div>

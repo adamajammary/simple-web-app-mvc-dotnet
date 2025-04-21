@@ -1,21 +1,34 @@
 ﻿body {
-    background-color: #505050;
-    color:            #FFF;
-    padding-top:      50px;
-    padding-bottom:   20px;
+    background-color: #505050 !important;
+    color: white !important;
+    padding-top: 50px !important;
+    padding-bottom: 20px !important;
 }
 
-input {
-    color: #000;
+input[type="checkbox"] {
+    width: 20px !important;
+    height: 20px !important;
+    margin: 0 !important;
 }
 
-select {
-    color: #000;
+.jumbotron h3 {
+    margin-bottom: 20px !important;
 }
 
-.api td, th {
-    padding-right:  20px;
-    vertical-align: top;
+input,
+select,
+.jumbotron {
+    color: black !important;
+}
+
+.dark-background a {
+    color: white !important;
+}
+
+.api td,
+th {
+    padding-right: 20px !important;
+    vertical-align: top !important;
 }
 
 .body-content {
@@ -23,10 +36,32 @@ select {
     padding-right: 15px;
 }
 
-.dark-background a {
-    color: white !important;
+.checkbox-group {
+    display: flex !important;
+    gap: 10px !important;
 }
 
-.jumbotron {
-    color: #000;
+.checkbox-label {
+    font-weight: normal !important;
+    margin: 0 !important;
+}
+
+.user {
+    color: #9d9d9d;
+    padding: 10px 15px;
+}
+
+@media (min-width: 768px) {
+    #Navigation {
+        float: none !important;
+        display: flex;
+    }
+
+    .flex-1 {
+        flex: 1;
+    }
+
+    .user {
+        padding: 15px;
+    }
 }

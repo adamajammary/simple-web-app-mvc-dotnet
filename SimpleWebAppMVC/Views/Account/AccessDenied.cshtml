@@ -1,0 +1,11 @@
+﻿@{
+    ViewData["title"] = "Access Denied";
+}
+
+<h2>@ViewData["title"]</h2>
+
+<div class="jumbotron">
+    <h3 class="text-danger">You do not have access to this resource.</h3>
+
+    <div><a asp-controller="Tasks" asp-action="Index">Back to List</a></div>
+</div>

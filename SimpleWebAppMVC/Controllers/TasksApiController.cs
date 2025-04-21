@@ -1,32 +1,44 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using NSwag.Annotations;
 using SimpleWebAppMVC.Data;
 using SimpleWebAppMVC.Models;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SimpleWebAppMVC.Controllers
 {
+    [ApiController]
+    [OpenApiTag("Tasks")]
     [Produces("application/json")]
-    [Route("api/Tasks")]
+    [Route("api/tasks")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class TasksApiController(AppDbContext dbCtx) : Controller
     {
         private readonly AppDbContext dbContext = dbCtx;
 
         /// <summary>Returns a list of all the tasks</summary>
+        [AllowAnonymous]
         [HttpGet]
         public JsonResult Get()
         {
-            return Json(from task in this.dbContext.Tasks select task);
+            var tasks = from task in this.dbContext.Tasks select task;
+
+            return Json(tasks);
         }
 
         /// <summary>Returns the task with the specified ID if it exists</summary>
         /// <param name="id">Task ID</param>
-        [HttpGet("{id}", Name = "GetTask")]
-        public IActionResult Get(string id)
+        [AllowAnonymous]
+        [HttpGet("{id}", Name = "Get")]
+        public async Task<IActionResult> Get(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
                 return NotFound();
 
-            var task = this.dbContext.Tasks.SingleOrDefault(t => t.Id == id);
+            var task = await this.dbContext.Tasks.SingleOrDefaultAsync(t => t.Id == id);
 
             if (task == null)
                 return NotFound();
@@ -34,51 +46,55 @@ namespace SimpleWebAppMVC.Controllers
             return Json(task);
         }
 
-        /// <summary>Adds a new task</summary>
+        /// <summary>Creates a new task</summary>
         /// <param name="newTask">New task</param>
         [HttpPost]
-        public IActionResult Post([FromBody] Task newTask)
+        public async Task<IActionResult> Post([FromBody] TaskModel newTask)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var task = new TaskDbModel(newTask);
+            var task = new TaskDbModel(newTask, this.User.Identity.Name);
 
-            this.dbContext.Add(task);
-            this.dbContext.SaveChanges();
+            await this.dbContext.AddAsync(task);
+            await this.dbContext.SaveChangesAsync();
 
-            return CreatedAtRoute("GetTask", new { id = task.Id }, task);
+            return CreatedAtRoute("Get", new { id = task.Id }, task);
         }
 
         /// <summary>Updates the task with the specified ID if it exists</summary>
         /// <param name="id">Task ID</param>
         /// <param name="updatedTask">Updated task</param>
         [HttpPut("{id}")]
-        public IActionResult Put(string id, [FromBody] Task updatedTask)
+        public async Task<IActionResult> Put(string id, [FromBody] TaskModel updatedTask)
         {
             if (string.IsNullOrWhiteSpace(id))
                 return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
             var task = this.dbContext.Tasks.SingleOrDefault(t => t.Id == id);
 
             if (task == null)
                 return NotFound();
 
-            if (!ModelState.IsValid)
-                return BadRequest();
+            if (task.CreatedBy != this.User.Identity.Name)
+                return Forbid(JwtBearerDefaults.AuthenticationScheme);
 
             task.Update(updatedTask);
 
             this.dbContext.Update(task);
-            this.dbContext.SaveChanges();
 
-            return Ok();
+            await this.dbContext.SaveChangesAsync();
+
+            return Ok(task);
         }
 
         /// <summary>Deletes the task with the specified ID if it exists</summary>
         /// <param name="id">Task ID</param>
         [HttpDelete("{id}")]
-        public IActionResult Delete(string id)
+        public async Task<IActionResult> Delete(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
                 return NotFound();
@@ -88,10 +104,14 @@ namespace SimpleWebAppMVC.Controllers
             if (task == null)
                 return NotFound();
 
-            this.dbContext.Tasks.Remove(task);
-            this.dbContext.SaveChanges();
+            if (task.CreatedBy != this.User.Identity.Name)
+                return Forbid(JwtBearerDefaults.AuthenticationScheme);
 
-            return Ok();
+            this.dbContext.Tasks.Remove(task);
+
+            await this.dbContext.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }
